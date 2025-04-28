@@ -114,7 +114,8 @@ public class Debug {
 	private static LiteralArgumentBuilder<FabricClientCommandSource> toggleShowingInvisibleArmorStands() {
 		return literal("toggleShowingInvisibleArmorStands")
 				.executes(context -> {
-					SkyblockerConfigManager.update(config -> config.debug.showInvisibleArmorStands = !config.debug.showInvisibleArmorStands);
+					SkyblockerConfigManager.get().debug.showInvisibleArmorStands = !SkyblockerConfigManager.get().debug.showInvisibleArmorStands;
+					SkyblockerConfigManager.save();
 					context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.debug.toggledShowingInvisibleArmorStands", SkyblockerConfigManager.get().debug.showInvisibleArmorStands)));
 					return Command.SINGLE_SUCCESS;
 				});
@@ -123,7 +124,8 @@ public class Debug {
 	private static LiteralArgumentBuilder<FabricClientCommandSource> toggleWebSocketDebug() {
 		return literal("toggleWebSocketDebug")
 				.executes(context -> {
-					SkyblockerConfigManager.update(config -> config.debug.webSocketDebug = !SkyblockerConfigManager.get().debug.webSocketDebug);
+					SkyblockerConfigManager.get().debug.webSocketDebug = !SkyblockerConfigManager.get().debug.webSocketDebug;
+					SkyblockerConfigManager.save();
 					context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.debug.toggledWebSocketDebug", SkyblockerConfigManager.get().debug.webSocketDebug)));
 					return Command.SINGLE_SUCCESS;
 				});
@@ -135,7 +137,7 @@ public class Debug {
 					List<ArmorStandEntity> armorStands = context.getSource().getWorld().getEntitiesByClass(ArmorStandEntity.class, context.getSource().getPlayer().getBoundingBox().expand(8d), EntityPredicates.NOT_MOUNTED);
 
 					for (ArmorStandEntity armorStand : armorStands) {
-						Iterable<ItemStack> equippedItems = ItemUtils.getArmor(armorStand);
+						Iterable<ItemStack> equippedItems = armorStand.getEquippedItems();
 
 						for (ItemStack stack : equippedItems) {
 							ItemUtils.getHeadTextureOptional(stack).ifPresent(texture -> context.getSource().sendFeedback(Text.of(texture)));

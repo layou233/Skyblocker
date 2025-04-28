@@ -78,12 +78,12 @@ public class AttributeShardAdder extends SimpleSlotTextAdder {
 
 		if (!ItemUtils.getItemId(stack).equals("ATTRIBUTE_SHARD")) return List.of();
 
-		NbtCompound attributesTag = customData.getCompoundOrEmpty("attributes");
+		NbtCompound attributesTag = customData.getCompound("attributes");
 		String[] attributes = attributesTag.getKeys().toArray(String[]::new);
 
 		if (attributes.length != 1) return List.of();
 		String attributeId = attributes[0];
-		int attributeLevel = attributesTag.getInt(attributeId, 0);
+		int attributeLevel = attributesTag.getInt(attributeId);
 		String attributeInitials = ID_2_SHORT_NAME.getOrDefault(attributeId, "");
 
 		return List.of(

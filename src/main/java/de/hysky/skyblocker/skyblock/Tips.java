@@ -16,7 +16,6 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,14 +75,7 @@ public class Tips {
     }
 
     private static Supplier<Text> getTipFactory(@Translatable String key, ClickEvent.Action clickAction, String value) {
-    	ClickEvent event = switch (clickAction) {
-    		case ClickEvent.Action.SUGGEST_COMMAND -> new ClickEvent.SuggestCommand(value);
-    		case ClickEvent.Action.OPEN_URL -> new ClickEvent.OpenUrl(URI.create(value));
-
-    		default -> throw new IllegalArgumentException("Unexpected value: " + clickAction);
-    	};
-
-        return () -> Text.translatable(key).styled(style -> style.withClickEvent(event));
+        return () -> Text.translatable(key).styled(style -> style.withClickEvent(new ClickEvent(clickAction, value)));
     }
 
     @Init
@@ -103,14 +95,16 @@ public class Tips {
     }
 
     private static int enableTips(CommandContext<FabricClientCommandSource> context) {
-        SkyblockerConfigManager.update(config -> config.general.enableTips = true);
-        context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.tips.enabled")).append(" ").append(Text.translatable("skyblocker.tips.clickDisable").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/skyblocker tips disable")))));
+        SkyblockerConfigManager.get().general.enableTips = true;
+        SkyblockerConfigManager.save();
+        context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.tips.enabled")).append(" ").append(Text.translatable("skyblocker.tips.clickDisable").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skyblocker tips disable")))));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int disableTips(CommandContext<FabricClientCommandSource> context) {
-        SkyblockerConfigManager.update(config -> config.general.enableTips = false);
-        context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.tips.disabled")).append(" ").append(Text.translatable("skyblocker.tips.clickEnable").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/skyblocker tips enable")))));
+        SkyblockerConfigManager.get().general.enableTips = false;
+        SkyblockerConfigManager.save();
+        context.getSource().sendFeedback(Constants.PREFIX.get().append(Text.translatable("skyblocker.tips.disabled")).append(" ").append(Text.translatable("skyblocker.tips.clickEnable").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skyblocker tips enable")))));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -156,10 +150,10 @@ public class Tips {
     private static Text tipMessage(Text tip) {
         return Constants.PREFIX.get().append(tip)
                 .append(" ")
-                .append(Text.translatable("skyblocker.tips.clickPreviousTip").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/skyblocker tips previous"))))
+                .append(Text.translatable("skyblocker.tips.clickPreviousTip").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skyblocker tips previous"))))
                 .append(" ")
-                .append(Text.translatable("skyblocker.tips.clickNextTip").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/skyblocker tips next"))))
+                .append(Text.translatable("skyblocker.tips.clickNextTip").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skyblocker tips next"))))
                 .append(" ")
-                .append(Text.translatable("skyblocker.tips.clickDisable").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/skyblocker tips disable"))));
+                .append(Text.translatable("skyblocker.tips.clickDisable").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skyblocker tips disable"))));
     }
 }

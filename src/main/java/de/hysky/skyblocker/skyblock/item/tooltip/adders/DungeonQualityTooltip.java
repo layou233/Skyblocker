@@ -21,7 +21,7 @@ public class DungeonQualityTooltip extends SimpleTooltipAdder {
 	public void addToTooltip(@Nullable Slot focusedSlot, ItemStack stack, List<Text> lines) {
 		NbtCompound customData = ItemUtils.getCustomData(stack);
 		if (customData == null || !customData.contains("baseStatBoostPercentage")) return;
-		int baseStatBoostPercentage = customData.getInt("baseStatBoostPercentage", 0);
+		int baseStatBoostPercentage = customData.getInt("baseStatBoostPercentage");
 		boolean maxQuality = baseStatBoostPercentage == 50;
 		if (maxQuality) {
 			lines.add(Text.literal(String.format("%-17s", "Item Quality:") + baseStatBoostPercentage + "/50").formatted(Formatting.RED).formatted(Formatting.BOLD));
@@ -30,7 +30,7 @@ public class DungeonQualityTooltip extends SimpleTooltipAdder {
 		}
 
 		if (customData.contains("item_tier")) {     // sometimes it just isn't here?
-			int itemTier = customData.getInt("item_tier", 0);
+			int itemTier = customData.getInt("item_tier");
 			if (maxQuality) {
 				lines.add(Text.literal(String.format("%-17s", "Floor Tier:") + itemTier + " (" + getItemTierFloor(itemTier) + ")").formatted(Formatting.RED).formatted(Formatting.BOLD));
 			} else {

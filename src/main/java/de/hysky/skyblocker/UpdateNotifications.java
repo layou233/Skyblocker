@@ -2,7 +2,6 @@ package de.hysky.skyblocker;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -105,7 +104,7 @@ public class UpdateNotifications {
 					Text versionText = Text.literal(newVersion.name()).styled(style -> style
 							.withFormatting(Formatting.GRAY)
 							.withUnderline(true)
-							.withClickEvent(new ClickEvent.OpenUrl(URI.create(downloadLink))));
+							.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadLink)));
 
 					CLIENT.player.sendMessage(Constants.PREFIX.get().append(Text.translatable("skyblocker.updateNotifications.newUpdateMessage", versionText)), false);
 					SystemToast.add(CLIENT.getToastManager(), TOAST_TYPE, Text.translatable("skyblocker.updateNotifications.newUpdateToast.title"), Text.stringifiedTranslatable("skyblocker.updateNotifications.newUpdateToast.description", newVersion.version()));

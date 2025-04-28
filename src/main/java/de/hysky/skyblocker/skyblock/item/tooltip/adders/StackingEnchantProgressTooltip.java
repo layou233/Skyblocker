@@ -11,6 +11,7 @@ import de.hysky.skyblocker.skyblock.item.tooltip.SimpleTooltipAdder;
 import de.hysky.skyblocker.utils.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -32,8 +33,8 @@ public class StackingEnchantProgressTooltip extends SimpleTooltipAdder {
 	public void addToTooltip(@Nullable Slot focusedSlot, ItemStack stack, List<Text> lines) {
 		NbtCompound customData = ItemUtils.getCustomData(stack);
 
-		if (customData.contains("enchantments")) {
-			NbtCompound enchantments = customData.getCompoundOrEmpty("enchantments");
+		if (customData.contains("enchantments", NbtElement.COMPOUND_TYPE)) {
+			NbtCompound enchantments = customData.getCompound("enchantments");
 			StackingEnchantInfo stackingEnchantInfo = null;
 			int stackingEnchantLevel = 0;
 
@@ -49,14 +50,14 @@ public class StackingEnchantProgressTooltip extends SimpleTooltipAdder {
 
 						default -> throw new IllegalStateException("Unexpected stacking enchant: " + enchantment);
 					};
-					stackingEnchantLevel = enchantments.getInt(enchantment, 0);
+					stackingEnchantLevel = enchantments.getInt(enchantment);
 
 					break;
 				}
 			}
 
 			if (stackingEnchantInfo != null && stackingEnchantLevel > 0 && stackingEnchantLevel < 10) {
-				int progress = customData.getInt(stackingEnchantInfo.field(), 0);
+				int progress = customData.getInt(stackingEnchantInfo.field());
 				int needed = stackingEnchantInfo.ladder()[stackingEnchantLevel];
 				Text text = Text.empty()
 						.append(Text.literal(stackingEnchantInfo.name() + " ").formatted(Formatting.GRAY))

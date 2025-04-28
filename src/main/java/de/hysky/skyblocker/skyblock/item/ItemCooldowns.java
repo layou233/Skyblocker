@@ -149,7 +149,7 @@ public class ItemCooldowns {
     }
 
     private static boolean isWearingBatArmor(PlayerEntity player) {
-        for (ItemStack stack : ItemUtils.getArmor(player)) {
+        for (ItemStack stack : player.getArmorItems()) {
             String itemId = ItemUtils.getItemId(stack);
             if (!BAT_ARMOR_IDS.contains(itemId)) {
                 return false;

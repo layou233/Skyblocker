@@ -1,6 +1,7 @@
 package de.hysky.skyblocker.skyblock.profileviewer.inventory;
 
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.skyblock.item.ItemProtection;
@@ -90,7 +91,9 @@ public class Inventory implements ProfileViewerPage {
             }
 
             if (ItemProtection.isItemProtected(stack)) {
+                RenderSystem.enableBlend();
                 context.drawTexture(RenderLayer::getGuiTextured, ItemProtection.ITEM_PROTECTION_TEX, x, y, 0, 0, 16, 16, 16, 16);
+                RenderSystem.disableBlend();
             }
 
             context.drawItem(stack, x, y);

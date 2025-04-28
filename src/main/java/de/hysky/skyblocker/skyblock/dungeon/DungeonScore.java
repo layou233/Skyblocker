@@ -9,7 +9,6 @@ import de.hysky.skyblocker.events.DungeonEvents;
 import de.hysky.skyblocker.skyblock.dungeon.secrets.DungeonManager;
 import de.hysky.skyblocker.skyblock.tabhud.util.PlayerListManager;
 import de.hysky.skyblocker.utils.Constants;
-import de.hysky.skyblocker.utils.ItemUtils;
 import de.hysky.skyblocker.utils.ProfileUtils;
 import de.hysky.skyblocker.utils.Utils;
 import de.hysky.skyblocker.utils.mayor.MayorUtils;
@@ -22,10 +21,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.collection.DefaultedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -205,7 +204,7 @@ public class DungeonScore {
 	public static boolean isEntityMimic(Entity entity) {
 		if (!Utils.isInDungeons() || !floorHasMimics || !(entity instanceof ZombieEntity zombie) || !zombie.isBaby()) return false;
 		try {
-			List<ItemStack> armor = ItemUtils.getArmor(zombie);
+			DefaultedList<ItemStack> armor = (DefaultedList<ItemStack>) zombie.getArmorItems();
 			return armor.stream().allMatch(ItemStack::isEmpty);
 		} catch (Exception e) {
 			LOGGER.error("[Skyblocker] Failed to check if entity is a mimic!", e);
