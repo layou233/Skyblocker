@@ -77,6 +77,10 @@ public class DungeonsConfig {
 		public boolean showMap = true;
 
 		public float scale = 1.2f;
+
+		public boolean enableLeapMessage = false;
+
+		public String leapMessage = "Leaped to [name]!";
 	}
 
 	public static class PuzzleSolvers {
