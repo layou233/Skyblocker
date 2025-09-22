@@ -4,6 +4,7 @@ import de.hysky.skyblocker.annotations.Init;
 import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.config.configs.DungeonsConfig;
 import de.hysky.skyblocker.skyblock.dungeon.secrets.DungeonManager;
+import de.hysky.skyblocker.utils.ColorUtils;
 import de.hysky.skyblocker.utils.Constants;
 import de.hysky.skyblocker.utils.Utils;
 import de.hysky.skyblocker.utils.render.WorldRenderExtractionCallback;
@@ -104,7 +105,7 @@ public class LividColor {
 			Entity lividEntity = client.world.getEntityById(correctLividId);
 			if (lividEntity != null) {
 				String lividName = lividEntity.getName().getString();
-				RenderHelper.renderLineFromCursor(context, Vec3d.ofCenter(lividEntity.getBlockPos(), 1f), ColorUtils.getFloatComponents(getGlowColor(lividName)), 1f, 2f);
+				collector.submitLineFromCursor(Vec3d.ofCenter(lividEntity.getBlockPos(), 1f), ColorUtils.getFloatComponents(getGlowColor(lividName)), 1f, 5f);
 			}
 		}
 	}
